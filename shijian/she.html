@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>贪吃蛇</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        body{
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+        .box{
+            width: 602px;
+            height: 602px;
+            margin-top: 30px;
+            border: 1px solid #000;
+        }
+        div{
+            width: 30px;
+            height: 30px;
+            float: left;
+            border: 1px solid #000;
+            box-sizing: border-box;
+            border-radius: 5px;
+        }
+        .she{
+            background: red;
+        }
+        .food{
+            background: blue;
+        }
+        .buttons{
+            width: 600px;
+            height: 50px;
+            margin: 0 auto;
+            /*background: aqua;*/
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 0;
+        }
+        button{
+            width: 100px;
+            height: 40px;
+            border-radius: 10px;
+            background: pink;
+            font-size: 20px;
+            text-align: center;
+            line-height: 40px;
+            color: #fff;
+            font-family: '楷体';
+            font-weight: 600;
+        }
+        .button>.btn1{
+            background: green;
+        }
+        .button>.btn1{
+            background: #666;
+        }
+        .button>.btn1{
+            background: deepskyblue;
+        }
+        .button>.btn1{
+            background: orangered;
+        }
+        .wen{
+            width: 350px;
+            height: 50px;
+            font-size: 24px;
+            text-align: center;
+            line-height: 50px;
+            border: 0;
+            font-weight: 800;
+            color: red;
+            font-family: '宋体';
+        }
+    </style>
+</head>
+<body>
+<div class="wen">COME ON ! SNAKE</div>
+<div class="buttons">
+    <button id="btn1">游戏开始</button>
+    <button id="btn2">游戏暂停</button>
+    <button id="btn3">正常模式</button>
+    <button id="btn4">极速模式</button>
+</div>
+<div class="box"></div>
+</body>
+</html>
+<script>console.log(undefined-null)
+    window.onload=function(){
+        function snake(box,btn1,btn2,btn3,btn4){
+            this.box=box;
+            this.btn1=btn1;
+            this.btn2=btn2;
+            this.btn3=btn3;
+            this.btn4=btn4;
+            this.snake=[
+                {x:0,y:0},
+                {x:1,y:0},
+                {x:2,y:0}
+            ];
+            this.way='right';
+            this.t=0;
+            this.food={};
+        }
+        snake.prototype={
+            play(){
+                this.brawScene();
+                this.brawSnake();
+                this.brawFood();
+                this.fang();
+                this.btn1.onclick=()=>{
+                    this.move(200);
+                }
+                this.btn2.onclick=()=>{
+                    clearInterval(this.t);
+                }
+                this.btn3.onclick=()=>{
+                    this.move(200);
+                }
+                this.btn4.onclick=()=>{
+                    this.move(100);
+                }
+            },
+            brawScene(){
+                let str='';
+                for(let i=0;i<20;i++){
+                    for(let j=0;j<20;j++){
+                        str+=`<div id='c${j}-${i}'></div>`;
+                    }
+                }
+                this.box.innerHTML=str;
+            },
+            brawSnake(){
+                this.snake.forEach(val=>{
+                    let obj=document.querySelector(`#c${val.x}-${val.y}`);
+                    obj.classList.add('she');
+                })
+            },
+            brawFood(){
+                let x,y;
+                do{
+                    x=Math.floor(Math.random()*20);
+                    y=Math.floor(Math.random()*20);
+                }while(this.cheak(x,y));
+                let fooddom=document.querySelector(`#c${x}-${y}`);
+                fooddom.classList.add('food');
+                this.food={x,y};
+//                console.log(cheak);
+            },
+            cheak(a,b){
+                 return this.snake.some(val=>val.x==a&&val.y==b);
+            },
+            move(f){
+                console.log(f);
+                this.t=setInterval(()=>{
+                        let lodsnake=this.snake[this.snake.length-1];
+                        let newsnake;
+                        switch (this.way){
+                            case 'right':
+                                newsnake={x:lodsnake.x+1,y:lodsnake.y};
+                                break;
+                            case 'left':
+                                newsnake={x:lodsnake.x-1,y:lodsnake.y};
+                                break;
+                            case 'top':
+                                newsnake={x:lodsnake.x,y:lodsnake.y-1};
+                                break;
+                            case 'bottom':
+                                newsnake={x:lodsnake.x,y:lodsnake.y+1};
+                                break;
+                        }
+                        //                console.log(newsnake);
+                        let newsnakedom=document.querySelector(`#c${newsnake.x}-${newsnake.y}`);
+                        if(!newsnakedom||this.cheak(newsnake.x,newsnake.y)){
+                            clearInterval(this.t);
+//                        console.log(this.t);
+                            alert('game over');
+                            return;
+                        }
+                        newsnakedom.className='she';
+                        this.snake.push(newsnake);
+                        //                  蛇尾
+                        //                console.log(last);
+                        if(newsnake.x==this.food.x&&newsnake.y==this.food.y){
+                            this.brawFood();
+                        }else{
+                            let last=this.snake.shift();
+                            let lastdom=document.querySelector(`#c${last.x}-${last.y}`);
+                            lastdom.classList.remove('she');
+                            //              console.log(this.snake);
+                        }
+//                    }
+                },f)
+            },
+            fang(){
+                document.onkeydown=(e)=>{
+                switch(e.which){
+                    case 37:
+                        if(this.way=='right'){
+                            return;
+                        }
+                        this.way='left';
+                        break;
+                    case 38:
+                        if(this.way=='buttom'){
+                            return;
+                        }
+                        this.way='top';
+                        break;
+                    case 39:
+                        if(this.way=='left'){
+                            return;
+                        }
+                        this.way='right';
+                        break;
+                    case 40:
+                        if(this.way=='top'){
+                            return;
+                        }
+                        this.way='bottom';
+                        break;
+                    }
+
+                }
+
+            }
+        }
+        let box=document.querySelector('.box');
+        let btn1=document.querySelector('#btn1');
+        let btn2=document.querySelector('#btn2');
+        let btn3=document.querySelector('#btn3');
+        let btn4=document.querySelector('#btn4');
+        let she=new snake(box,btn1,btn2,btn3,btn4);
+        she.play();
+    }
+
+
+
+
+
+/*window.onload=function(){
+//    构建场景
+    let box=document.querySelector('.box');
+    let str='';
+    for(let x=0;x<20;x++){
+        for(let y=0;y<20;y++){
+            str+=`<div id=c${y}-${x}></div>`;
+        }
+    }
+    box.innerHTML=str;
+//    构建游戏元素
+    let she=[
+        {x:0,y:0},
+        {x:1,y:0},
+        {x:2,y:0}
+    ]
+//    蛇
+    she.forEach((val)=>{
+        let shedom=document.querySelector(`#c${val.x}-${val.y}`);
+//    console.log(shedom);
+        shedom.classList.add('she');
+    })
+//食物
+    let food=getfood();
+    function getfood(){
+        do{
+            var x=Math.floor(Math.random()*20);
+            var y=Math.floor(Math.random()*20);
+        }while(cheak(x,y));
+
+
+        let fooddom=document.querySelector(`#c${x}-${y}`);
+        fooddom.classList.add('food');
+        return {x,y};
+    }
+
+
+    function cheak(a,b){
+        return she.some((val)=>val.x==a&&val.y==b);
+    }
+//跑
+    let way='right';
+    function move(){
+        let shehead=she[she.length-1];
+        let newhead;
+        if(way=='right'){
+            newhead={x:shehead.x+1,y:shehead.y};
+        }else if(way=='top'){
+            newhead={x:shehead.x,y:shehead.y-1};
+        }else if(way=='left'){
+            newhead={x:shehead.x-1,y:shehead.y};
+        }else if(way=='bottom'){
+            newhead={x:shehead.x,y:shehead.y+1};
+        }*//*
+        switch(way){
+            case 'right':newhead={x:shehead.x+1,y:shehead.y};
+                break;
+            case 'top':newhead={x:shehead.x,y:shehead.y-1};
+                break;
+            case 'left':newhead={x:shehead.x-1,y:shehead.y};
+                break;
+            case 'bottom':newhead={x:shehead.x,y:shehead.y+1};
+                break;
+        }*//*
+//        console.log(newhead.x);
+        let newheaddom=document.querySelector(`#c${newhead.x}-${newhead.y}`);
+        if(!newheaddom||cheak(newhead.x,newhead.y)){
+            clearInterval(t);
+            alert('game over');
+            return;
+        }
+        newheaddom.classList.add('she');
+        she.push(newhead);
+        if(newhead.x==food.x&&newhead.y==food.y){
+//           获取食物
+            food=getfood();
+        }else{
+        let last=she.shift();
+        let lastdom=document.querySelector(`#c${last.x}-${last.y}`);
+        lastdom.classList.remove('she');
+        }
+    }
+    let t=setInterval(move,1000);
+
+//    设置方向
+    document.onkeydown=function(e){
+        let on=e.which;
+        console.log(on);
+        switch(on){
+            case 37:
+                if(way=='right'){
+                    return;
+                }
+                way=way='left';
+            break;
+            case 38:
+                if(way=='buttom'){
+                    return;
+                }
+                way=way='top';
+            break;
+            case 39:
+                if(way=='left'){
+                    return;
+                }
+                way=way='right';
+            break;
+            case 40:
+                if(way=='top'){
+                    return;
+                }
+                way=way='buttom';
+            break;
+        }
+    }
+}*/
+</script>

@@ -1,0 +1,683 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>事件详情</title>
+    <style>
+        /*body{
+            margin: 0;
+            padding: 0;
+        }
+        div.box{
+            width: 300px;
+            height: 300px;
+            background: blue;
+            margin: 0 auto;
+            font-size: 20px;
+            color: #fff;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        div.one{
+            width: 300px;
+            height: 300px;
+            background: red;
+            margin: 0 auto;
+            font-size: 20px;
+            color: #fff;
+            position: absolute;
+            left: 600px;
+            top: 0;
+        }*/
+        /*.box{
+            width: 100px;
+            height: 100px;
+            background: red;
+        }*//*
+        .son{
+            width: 100px;
+            height: 100px;
+            background: blue;
+            margin-left: 200px;
+        }*/
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        main {
+            width: 1200px;
+            height: auto;
+            margin: 10px auto;
+            text-align: center;
+            box-shadow: 0 0 2px 5px rgba(0,0,0,0.5);
+        }
+        table{
+            width: 100%;
+            height: auto;
+            font-size: 16px;
+            color: #333;
+            padding: 20px;
+            table-layout: fixed;
+        }
+        th,td{
+            width: 20%;
+            height: 40px;
+            line-height: 40px;
+            border-bottom: 2px dashed #999;
+        }
+        .del{
+            width: 100px;
+            height: 30px;
+            background: red;
+            color: #fff;
+            line-height: 30px;
+            border-radius: 5px;
+            margin: 5px auto;
+        }
+        button{
+            width: 100px;
+            height: 40px;
+            margin: 10px auto;
+            background: red;
+            border-radius: 5px;
+            color: #fff;
+            border: 0;
+        }
+    </style>
+</head>
+<body><!--
+<div class="box"></div>
+<div class="one"></div>-->
+<!--<div class="box">--><!--
+    <div class="son"></div>
+    <button>anananananaan</button>-->
+<!--</div>-->
+<!--
+<main>
+    <h1>学生基本信息表</h1>
+    <table>
+        <tr>
+            <th>姓名</th>
+            <th>学号</th>
+            <th>年龄</th>
+            <th>成绩</th>
+            <th>操作</th>
+        </tr>
+        <tr>
+            <td>顺丰</td>
+            <td>001</td>
+            <td>55</td>
+            <td>251</td>
+            <td>
+                <div class="del">删除</div>
+            </td>
+        </tr>
+        <tr>
+            <td>瑞丰</td>
+            <td>002</td>
+            <td>54</td>
+            <td>121</td>
+            <td>
+                <div class="del">删除</div>
+            </td>
+        </tr>
+    </table>
+    <button id="add">添加</button>
+</main>-->
+
+
+
+<main>
+    <h1>学生基本信息表</h1>
+    <table>
+        <tr>
+            <th>学号</th>
+            <th>姓名</th>
+            <th>年龄</th>
+            <th>成绩</th>
+            <th>操作</th>
+        </tr>
+    </table>
+    <button>添加</button>
+</main>
+</body>
+</html>
+<script>
+window.onload=function() {
+ /*   let datebase=[
+        {id:0,num:'001',mame:'伏而尔',age:23,tel:215634165},
+        {id:1,num:'002',mame:'格瑞特日',age:54,tel:215634165},
+        {id:2,num:'003',mame:'玫瑰花',age:52,tel:215634165},
+        {id:3,num:'004',mame:'桃夭',age:10,tel:215634165},
+        {id:4,num:'006',mame:'天假',age:11,tel:215634165},
+        {id:5,num:'005',mame:'二锅头',age:41,tel:215634165}
+    ];
+    let nextid=6;
+    localStorage.nextid=nextid;
+    localStorage.Date=JSON.stringify(datebase);
+    console.log(localStorage.Date);*/
+    if(localStorage.Date){
+        datebase=JSON.parse(localStorage.Date);
+    }
+//    console.log(datebase);
+    let tbody=document.querySelector('tbody');
+    let str='';
+    datebase.forEach((val)=>{
+        str+=`<tr id='${val.id}'>`;
+        str+=`
+            <td type='num'>${val.num}</td>
+            <td type='mame'>${val.mame}</td>
+            <td type='age'>${val.age}</td>
+            <td type='tel'>${val.tel}</td>
+            <td>
+            <div class="del">删除</div>
+            </td>`;
+        str+='</tr>';
+    })
+    tbody.innerHTML+=str;
+
+    let button=document.querySelector('button');
+    let nextid=Number(localStorage.nextid);
+    button.onclick=function(){
+        let str=document.createElement('tr');
+        str=`<tr id='${nextid}'>`;
+        str+=`
+        <td type='num'></td>
+        <td type='mame'></td>
+        <td type='age'></td>
+        <td type='tel'></td>
+        <td>
+        <div class="del">删除</div>
+        </td>`;
+        str+='</tr>';
+        tbody.innerHTML+=str;
+        datebase.push({id:nextid,num:'',mame:'',age:'',tel:''},);
+        nextid++;
+        localStorage.Date=JSON.stringify(datebase);
+        localStorage.nextid=nextid;
+
+    }
+//    删除
+    tbody.onclick=(e)=>{
+        let curron= e.target;
+        if(curron.classList.contains('del')){
+            let par=curron.parentNode.parentNode;
+            par.parentNode.removeChild(par);
+            let id=par.id;
+            datebase.splice(id,1);
+            console.log(id);
+            let index=datebase.findIndex(val=>{
+                  return val.id==id;
+            })
+            console.log(datebase.splice(index,1));
+            localStorage.Date=JSON.stringify(datebase);
+        }else if(curron.nodeName=='TD'&&curron.children.length==0){
+            let val=curron.innerText;
+            curron.innerHTML='';
+            let input=document.createElement('input');
+            input.value=val;
+            input.onblur=function(){
+                if(input.value==val){
+                    curron.innerText=input.value;
+                }else{
+                    curron.innerText=input.value;
+//                    console.log(input.value);
+                    let id=curron.parentNode.id;
+                    let type=curron.getAttribute('type');
+                    /*
+                    let type=document.querySelectorAll('type');*/
+                    let index=datebase.findIndex(val=>{
+                                return val.id==id;
+                    })
+                    console.log(datebase[index][type]);
+                    datebase[index][type]=curron.innerText;
+                    localStorage.Date=JSON.stringify(datebase);
+                }
+            }
+            curron.appendChild(input);
+            input.focus();
+        }
+console.log(datebase);
+    }
+
+
+
+
+
+
+    /*let tbody=document.querySelector('tbody');
+    console.log(tbody);
+    tbody.addEventListener('click',function(e){
+        const currot= e.target;
+        if(currot.classList.contains('del')){
+            let tr=currot.parentNode.parentNode;
+            tr.parentNode.removeChild(tr);
+        }else if(currot.nodeName=='TD'&&currot.children.length==0){
+            let val= currot.innerText;
+            currot.innerText='';
+            let input=document.createElement('input');
+            input.value=val;
+            input.onblur=function(){
+                currot.innerText=input.value;
+            }
+            currot.appendChild(input);
+            input.focus();
+        }
+
+    })
+
+
+//    添加
+    let button=document.querySelector('button');
+    button.onclick=function(){
+        let tr=document.createElement('tr');
+        tr.innerHTML=`
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>
+        <div class="del">删除</div>
+        </td>`;
+        tbody.appendChild(tr);
+    }*/
+
+
+/*
+//    sessionStorage.setItem('name','lisi');
+//    sessionStorage.age=20;
+//    sessionStorage.removeItem('name');
+    console.log(sessionStorage.getItem('name'));
+    console.log(sessionStorage.age);
+//
+//    localStorage.setItem('name','csdcds');
+//    localStorage.age=12;
+    console.log(localStorage.name);
+    console.log(localStorage.getItem('age'));
+    localStorage.clear();*/
+
+   /* function cookie() {
+
+    }
+
+    cookie.prototype = {
+        set(key, value, time) {
+            if (time) {
+                let now = new Date();
+                now.setTime(now.getTime() + time * 1000);
+                document.cookie = key + '=' + value + ';expires=' + now.toGMTString();
+            }
+            else {
+                document.cookie = key + '=' + value;
+            }
+        },
+        del(key)
+    {
+        let now = new Date();
+        now.setTime(now.getTime() - 1);
+        document.cookie = key + '=;expires=' + now.toGMTString();
+    }
+    ,
+    get(key)
+    {
+        let cos = document.cookie;
+        let arr = cos.split(';');
+        arr.forEach(val => {
+            let brr = val.split('=');
+        if (brr[0] == key) {
+            res = brr[1];
+        }
+
+    }
+    )
+    return res
+
+}
+
+}
+let coo = new cookie();
+coo.set('aa', 'bb', 20);
+coo.set('bb', 'cc', 10);
+console.log(coo.get('aa'));
+}*/
+    /*function cookie(){
+
+    }
+    cookie.prototype={
+        set(key,value,time){
+            if(time){
+                let now=new Date();
+                now.setTime(now.getDate()+time);
+//                console.log(now.toGMTString());
+                document.cookie=key+'='+value+';expires='+now.toGMTString();
+                console.log(document.cookie);
+            }else{
+//                console.log(key);
+                document.cookie=key+'='+value;
+                console.log(document.cookie);
+            }
+        },
+//        del(){},
+        get(key){
+            let a=document.cookie;
+            let arr=a.split('; ');
+            console.log(arr);
+            let res=false;
+            arr.forEach((val)=>{
+                let brr=val.split('=');
+                if(brr[0]==key){
+                    res=brr[1];
+                }
+            })
+            return res;
+        }
+    }
+    let coo=new cookie();
+    coo.set('aa','bb');
+    coo.set('bb','sdfsd');
+    coo.set('cc','frdf');
+    console.log(coo.get('bb'));*/
+}
+
+ /*
+     let arr=[1,2,3];
+     document.cookie='aa=bb';
+     document.cookie='cc=dd';
+     document.cookie='arr=${arr}';*/
+//     console.log(document.cookie);/*
+     /*let now=new Date();
+     now.setTime(now.getTime()+30*1000);
+     document.cookie='aa==22;expires='+now.toGMTString();
+     console.log(document.cookie);*//*
+ }*/
+
+
+ /*
+     window.onload=function(){
+         let tbody=document.querySelector('tbody');
+         tbody.addEventListener('click',function(e){
+             let td= e.target;
+             if(td.classList.contains('del')){
+                 let tr=td.parentNode.parentNode;
+//                 console.log(tr.parentNode.parentNode);
+                 tr.parentNode.removeChild(tr);
+             }else if(td.nodeName=='TD'&&td.children.length==0){
+                 let val=td.innerHTML;
+                 td.innerText='';
+                 let input=document.createElement('input');
+                 input.value=val;
+                 input.onblur=function(){
+                     td.innerText=input.value;
+                 }
+                 td.appendChild(input);
+                 input.focus();
+             }
+         })
+
+//         添加
+         let add=document.querySelector('#add');
+         add.onclick=function(){
+             let tr=document.createElement('tr');
+             tr.innerHTML=`
+             <td></td>
+             <td></td>
+             <td></td>
+             <td></td>
+             <td>
+             <div class="del">删除</div>
+             </td>;
+             `;
+             tbody.appendChild(tr);
+         }*/
+
+
+//         修改
+
+
+
+
+
+
+         /*let a=document.querySelector('a');
+         a.onclick=function(){
+             if(e.preventDefault){
+                 e.preventDefault();
+                 alert('1');
+             }else{
+                 e.returnValue=false;
+             }
+         }*//*
+         let box=document.querySelector('.box');
+         let son=document.querySelector('.son');
+         box.onclick=function(e){
+             console.log('box点击 冒泡');
+         }
+         son.onclick=function(e){
+             console.log('son点击 冒泡');
+         }
+         window.onclick=function(e){
+             console.log('body点击 冒泡');
+         }
+         box.addEventListener('click',function(e){
+             console.log('box点击 捕获 ');
+             e.stopPropagation();
+         },true);
+         son.addEventListener('click',function(e){
+             console.log('son点击 捕获');
+         },true);
+         window.addEventListener('click',function(e){
+             console.log('body点击 捕获');
+         },true);*//*
+         if(preventBubble){
+             e.preventDefault();
+             e.stopPropagation();
+         }else{
+             e.returnValue=false;
+             e.cetelBubblo=true;
+         }*//*
+         let box=document.querySelector('.son');
+         let btn=document.querySelector('button');
+         console.log(btn);
+         window.addEventListener('click',function(e){
+             console.dir(e);
+         })
+//         事件委托   捕获型事件
+         btn.onclick=function(){
+             console.log('2');
+             let newbox=document.createElement('div');
+//             新建元素
+             newbox.className='son';
+             newbox.innerHTML='新的元素';
+             this.parentNode.insertBefore(newbox,this);
+//             获取this的父元素节点      添加在this之前
+         }*/
+
+
+
+
+//     }
+
+
+//        window.onload= function () {
+
+
+
+//            var div=document.querySelector('div');
+//            console.log(div);
+            /*function f(){
+                console.log('1');
+            }
+            function f1(){
+                console.log('2');
+            }
+            function f20(){
+                console.log('3');
+            }
+        div.onclick=f2;
+        div.addEventListener('click',f,false);
+        div.addEventListener('click',f1,false);
+//        div.removeEventListener('click',f);
+//        div.removeEventListener('click',f1);
+        div.onclick=null;*/
+       /* div.onmouseover=function(e){
+            this.innerHTML=`e.offsetX:${e.offsetX}<br> e.offsetY:${e.offsetY}`;
+        }*//*
+        div.onmouseover=function(e){
+             this.innerHTML=`e.clientX:${e.clientX}<br> e.clientY:${e.clientY}`;
+        }*//*
+            div.onclick=function(e){
+                this.innerHTML=`e.pageX:${e.pageX}<br> e.pageY:${e.pageY}`;
+            }*//*
+            div.onclick=function(e){
+                this.innerHTML=`e.pageX:${e.pageX}<br> e.pageY:${e.pageY}`;
+            }*//*
+            div.onclick=function(e){
+                this.innerHTML=`e.screenX:${e.screenX}<br> e.screenY:${e.screenY}`;
+            }*/
+
+
+            /*div.onmousedown=function(e){
+                let offx= e.offsetX;
+                let offy=e.offsetY;
+                console.log(offx,offy);
+//              this.innerHTML=`e.pageX:${offx}<br> e.pageY:${offy}`;
+                document.onmousemove=(e)=>{
+                    let off1=e.clientX;
+                    let off2=e.clientY;
+                    let left=off1-offx;
+                    let tops=off2-offy;
+                    this.innerHTML=`even.pageX:${left}<br> even.pageY:${tops}`;
+                    console.log(div.style.transform);
+                    if(left<=0){
+                        left=0;
+                    }else if(tops<=0){
+                        tops=0;
+                    }else if(document.documentElement.clientWidth<=left+this.offsetWidth){
+                        left=document.documentElement.clientWidth-this.offsetWidth;
+                    }else if(document.documentElement.clientHeight<=tops+this.offsetHeight) {
+                        tops = document.documentElement.clientHeight-this.offsetHeight;
+                    }
+                    div.style.left=left+'px';
+                    div.style.top=tops+'px';
+                }
+            }
+            div.onmouseup=function(e){
+                document.onmousemove=null;
+            }*/
+/*
+            function Drag(dom){
+                this.dom=dom;
+                this.cw=document.documentElement.clientWidth;
+                this.ch=document.documentElement.clientHeight;
+//                console.log(this.cw,this.ch);
+            }
+            Drag.prototype={
+                play(){
+                    this.down();
+                    this.up();
+//                    this.resize();
+                },
+                down(){
+                    this.dom.onmousedown=(e)=>{
+                        this.offx=e.offsetX;
+                        this.offy=e.offsetY;
+                        console.log(this.offx,this.offy);
+                        this.move();
+                    }
+                },
+                move(){
+                    document.onmouseover=(e)=>{
+                        e.preventDefault();
+                        this.ow=e.clientX;
+                        this.oh=e.clientY;
+                        let left=this.ow-this.offx;
+                        let tops=this.oh-this.offy;
+                        console.log(this.ow,this.oh);
+                        if(left<=0){
+                            left=0;
+                        }else if(tops<=0){
+                            tops=0;
+                        }else if(this.cw<=left+this.offx){
+                            left=this.cw-this.offx;
+                        }else if(this.ch<=tops+this.offy) {
+                            tops = this.ch-this.offy;
+                        }
+                        this.dom.style.left=left+'px';
+                        this.dom.style.top=tops+'px';
+                    }
+                },
+                up(){
+                    this.dom.onmouseup=(e)=>{
+                        document.onmousemove=null;
+                    }
+                }
+            }
+            let dom=new Drag(document.querySelector('.box'));
+            dom.play();
+            let dom1=new Drag(document.querySelector('.one'));
+            dom1.play();*/
+
+
+
+//            window.onload=function () {
+                /*function Drag(dom){
+                    this.oDiv=dom;
+                    var _this=this;
+                    console.log(this);
+                    this.x=0;
+                    this.y=0;
+                    this.oDiv.onmousedown=function(e){
+                        _this.draw(e);
+                        return false;
+                    }
+                }
+                Drag.prototype.draw=function(e){
+                    var e=e||event;
+                    var _this=this;
+                    this.x=e.pageX-this.oDiv.offsetLeft;
+                    this.y=e.pageY-this.oDiv.offsetTop;
+
+                    document.onmousemove=function(e){
+                        var e=e||event;
+                        _this.oDiv.style.left=e.pageX-_this.x+"px";
+                        _this.oDiv.style.top=e.pageY-_this.y+"px";
+                    }
+                    document.onmouseup=function(e){
+                        var e=e||event;
+                        document.onmousemove=null;
+                        document.onmouseup=null;
+                    }
+                }
+                var lalala=new Drag(document.querySelector("#div1"));
+
+                var hahaha=new Drag(document.querySelector("#div2"));*/
+//            }
+
+
+
+
+
+
+
+
+
+//        div.onclick=function{
+          /*  if(div.attachEvent){
+                div.attachEvent('onclick',function(){
+                    console.log('1');
+                })
+                div.attachEvent('onclick',function(){
+                    console.log('2');
+                })
+            }else{
+                div.addEventListener('click',function(){
+                    console.log('1');
+                },false);
+                div.addEventListener('click',function(){
+                    console.log('2');
+                },false);
+            }*/
+//        }
+//    }
+</script>

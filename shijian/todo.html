@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>TODO</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            box-sizing: border-box;
+        }
+        body{
+            background: #cdcdcd;
+        }
+        header{
+            width: 100%;
+            height: 50px;
+            background: #333;
+        }
+        .input{
+            width:550px;
+            height: 50px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .input>input{
+            width: 400px;
+            height: 30px;
+            background: #fff;
+            border: 0;
+            border-radius: 10px;
+            padding: 0 20px;
+        }
+        span{
+            font-size: 18px;
+            line-height: 50px;
+            color: #fff;
+        }
+        main{
+            width: 550px;
+            height: auto;
+            padding: 0 20px;
+            overflow: hidden;
+            /*background: red;*/
+            margin: 0 auto;
+        }
+        .amin{
+            width: 100%;
+            height: auto;
+            overflow: hidden;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .amin>p{
+            font-size: 18px;
+            line-height: 50px;
+            color: #000;
+        }
+        .zhshu,.yishu{
+            width: 26px;
+            height:26px;
+            background: #fff;
+            font-size: 12px;
+            text-align: center;
+            line-height: 26px;
+            color: #000;
+            border-radius: 50%;
+        }
+        .tiao{
+            width: 100%;
+            height: auto;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        .zheng .true{
+            width: 100%;
+            height: 32px;
+            border-radius: 6px;
+            border-left: 5px solid #999;
+            opacity: 1;
+            background: #fff;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .yi .true{
+            width: 100%;
+            height: 32px;
+            border-radius: 6px;
+            border-left: 5px solid #999;
+            opacity: 0.5;
+            background: #fff;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .true>input{
+            width: 22px;
+            height: 22px;
+            background: #dcdcdc;
+            border: 1px solid #666666;
+        }
+        .wen{
+            width: 75%;
+            height: 100%;
+            font-size: 14px;
+            line-height: 32px;
+            color: #333;
+        }
+        .true>.a{
+            width: 22px;
+            height: 22px;
+            background: #ccc;
+            border: 1px solid #ffffff;
+            color: #ffffff;
+            font-size: 14px;
+            text-align: center;
+            line-height: 22px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="input">
+        <span>ToDolist</span>
+        <input type="text" value="创建TODO"/>
+    </div>
+</header>
+<main class="zheng">
+    <div class="amin">
+        <p>正在进行</p>
+        <div class="zhshu">0</div>
+    </div><!--
+    <ul class="tiao">
+        <li class="true">
+            <input type="checkbox" checkbox/>
+            <p class="wen">他人的官方同人刚好肉体和个人愤怒太原号</p>
+            <a href="javascript:remove(1)">-</a>
+        </li>
+    </ul>-->
+</main>
+<main class="yi">
+    <div class="amin">
+        <p>已经完成</p>
+        <div class="yishu">0</div>
+    </div>
+</main>
+</body>
+</html>
+<script>
+    window.onload=function(){
+
+        function ToDos(shuru,main1,main2,zhshu,yishu){
+            this.shuru=shuru;
+            this.main1=main1;
+            this.main2=main2;
+            this.zhshu=zhshu;
+            this.yishu=yishu;
+        /*let datebase=[
+            {id:0,value:'检查本身的弩手第一次不碍事不要'},
+            {id:1,value:'产生的聪明代理思考和覅话费is东风街铺地发挥'}
+        ];
+         let nextid=2;
+         localStorage.nextid=nextid;
+         localStorage.Date=JSON.stringify(datebase);
+         console.log(localStorage.Date);*/
+            /*let datebase2=[
+             ];
+             let nextid2=0;
+             localStorage.nextid2=nextid2;
+             localStorage.Date2=JSON.stringify(datebase2);
+             console.log(localStorage.Date2);*/
+            if(localStorage.Date2){
+                datebase2=JSON.parse(localStorage.Date2);
+            }
+            if(localStorage.Date){
+                datebase=JSON.parse(localStorage.Date);
+            }/*
+            nextid=localStorage.nextid;*/
+        }
+        ToDos.prototype={
+            play(){
+                this.date();
+                this.add();
+                this.remove();
+            },
+            date(){
+                datebase.forEach((val,index)=>{
+                    let tiao=document.createElement('ul');
+                    tiao.className='tiao';
+//                    tiao.classId='val.id';
+                    tiao.innerHTML=`
+                        <li class="true" id=${val.id}>
+                            <input type="checkbox" class='in'/>
+                            <p class="wen" type='value'>${val.value}</p>
+                            <div class='a'>-</div>
+                        </li>
+                    `;
+                    this.main1.appendChild(tiao);
+
+//                    this.main1.appendChild(tiao);
+//                    let tr=document.createElement('li');
+//                    tr.className='true';
+//                    tiao.appendChild(tr);
+//                    var input=document.createElement('input');
+//                    input.setAttribute('type','checkbox');
+//                    input.className='in';
+//                    tr.appendChild(input);
+//                    var p=document.createElement('p');
+//                    p.className='wen';
+//                    p.innerText=val.value;
+//                    tr.appendChild(p);
+//                    var a=document.createElement('div');
+//                    a.className='a';
+//                    tr.appendChild(a);
+                    shuru.value='添加TODO';
+                    this.zhshu.innerText++;
+                })
+                datebase2.forEach((val)=>{
+                    let tiao=document.createElement('ul');
+                    tiao.className='tiao';
+//                    tiao.classId='val.id';
+                    tiao.innerHTML=`
+                    <li class="true" id=${val.id}>
+                        <input type="checkbox" class='in' checked='checked'/>
+                        <p class="wen">${val.value}</p>
+                        <div class='a'>-</div>
+                    </li>
+                    `;
+                    this.main2.appendChild(tiao);
+                    /*let tr=document.createElement('li');
+                    tr.className='true';
+                    tiao.appendChild(tr);
+                    var input=document.createElement('input');
+                    input.setAttribute('type','checkbox');
+                    input.className='in';
+                    tr.appendChild(input);
+                    var p=document.createElement('p');
+                    p.className='wen';
+                    p.innerText=val.value;
+                    tr.appendChild(p);
+                    var a=document.createElement('div');
+                    a.className='a';
+                    tr.appendChild(a);*/
+                    shuru.value='添加TODO';
+                    this.yishu.innerText++;
+                })
+            },
+            add(){
+                document.onkeydown=(e)=>{
+                    let enter= e.which;
+                    if(enter==13){
+                        let shuw=shuru.value;
+//                        console.log(shuw);
+                        if(shuw==''){
+                            alert("内容不能为空");
+                        }
+                        let tiao=document.createElement('ul');
+                        tiao.className='tiao';
+//                        tiao.classId='val.id';
+                        tiao.innerHTML=`
+                            <li class="true" id=${val.id}>
+                                <input type="checkbox" class='in'/>
+                                <p class="wen" type='value'>${shuw}</p>
+                                <a href="javascript:remove(1)" class='a'>-</a>
+                                </li>
+                            `;
+                        this.main1.appendChild(tiao);
+                        /*let tr=document.createElement('li');
+                        tr.className='true';
+                        tiao.appendChild(tr);
+                        var input=document.createElement('input');
+                        input.setAttribute('type','checkbox');
+                        input.className='in';
+                        tr.appendChild(input);
+                        var p=document.createElement('p');
+                        p.className='wen';
+                        p.innerText=shuw;
+                        tr.appendChild(p);
+                        var a=document.createElement('div');
+                        a.className='a';
+                        tr.appendChild(a);*/
+                        this.zhshu.innerText++;
+//                        console.log(shuw);
+                        datebase.push({id:localStorage.nextid,value:shuw});
+                        localStorage.nextid++;
+                        localStorage.Date=JSON.stringify(datebase);
+                        shuru.value='添加TODO';
+                    }
+                }
+            },
+            remove(){
+                this.main1.onclick=(e)=>{
+                    let del= e.target;
+                    let par=del.parentNode.parentNode;
+                    console.log(par);
+                    if(del.classList.contains('a')){
+                        par.parentNode.removeChild(par);
+                        let id=par.id;
+                        let index=datebase.findIndex(val=>{
+                               return val.id==id;
+                        })
+                        console.log(datebase.splice(index,1));
+                        this.zhshu.innerText--;
+                        localStorage.Date=JSON.stringify(datebase);
+                    }else if(del.classList.contains('in')){
+                        let val=del.nextElementSibling.innerText;
+                        this.yidong(val);
+                        par.parentNode.removeChild(par);
+                        let id=par.id;
+                        let index=datebase.findIndex(val=>{
+                               return val.id==id;
+                        })
+                        console.log(datebase.splice(index,1));
+                        localStorage.Date=JSON.stringify(datebase);
+                        this.zhshu.innerText--;
+                    }else if(del.classList.contains('wen')){
+                        let val=del.innerText;
+                        let input=document.createElement('input');
+                        del.innerHTML='';
+                        input.value=val;
+                        input.onblur=function(){
+                            if(input.value==val){
+                                del.innerText=input.value;
+                            }else{
+                                del.innerText=input.value;
+                                let id=del.parentNode.id;
+                                let type=del.getAttribute('type');
+                                let index=datebase.findIndex(val=>{
+                                      return val.id==id;
+                                })
+                                datebase[index][type]=del.innerText;
+                                localStorage.Date=JSON.stringify(datebase);
+                            }
+                        }
+                        del.appendChild(input);
+                        input.focus();
+                    }
+                }
+                this.main2.onclick=(e)=>{
+                    let del= e.target;
+                    let par=del.parentNode.parentNode;
+                    if(del.classList.contains('a')){
+                        par.parentNode.removeChild(par);
+                        let id=par.id;
+                        let index=datebase2.findIndex(val=>{
+                              return val.id==id;
+                        })
+                        console.log(datebase2.splice(index,1));
+                        this.yishu.innerText--;
+                        localStorage.Date2=JSON.stringify(datebase2);
+                    }else if(del.classList.contains('wen')){
+                        let val=del.innerText;
+                        let input=document.createElement('input');
+                        del.innerHTML='';
+                        input.value=val;
+                        input.onblur=function(){
+                            if(input.value==val){
+                                del.innerText=input.value;
+                            }else{
+                                del.innerText=input.value;
+                                let id=del.parentNode.id;
+                                let type=del.getAttribute('type');
+                                let index=datebase2.findIndex(val=>{
+                                      return val.id==id;
+                                })
+                                datebase2[index][type]=del.innerText;
+                                localStorage.Date2=JSON.stringify(datebase2);
+                            }
+                        }
+                        del.appendChild(input);
+                        input.focus();
+                    }
+                }
+            },
+            yidong(val){
+                let tiao=document.createElement('ul');
+                tiao.className='tiao';
+                tiao.innerHTML=`
+                    <li class="true" id=${val.id}>
+                        <input type="checkbox" class='in' checked='checked'/>
+                        <p class="wen">${val}</p>
+                        <a href="javascript:remove(1)" class='a'>-</a>
+                    </li>
+                `;
+                this.main2.appendChild(tiao);/*
+                let tr=document.createElement('li');
+                tr.className='true';
+                tiao.classId='val.id';
+                tiao.appendChild(tr);*/
+
+                /*var input=document.createElement('input');
+                input.setAttribute('type','checkbox');
+                input.setAttribute('checkbox','checkbox');
+                tr.appendChild(input);
+                var p=document.createElement('p');
+                p.className='wen';
+                p.innerText=val;
+                tr.appendChild(p);
+                var a=document.createElement('div');
+                a.className='a';
+                tr.appendChild(a);*/
+                datebase2.push({id:localStorage.nextid2,value:val});
+                localStorage.nextid2++;
+                localStorage.Date2=JSON.stringify(datebase2);
+                this.yishu.innerText++;
+            }
+        }
+        let shuru=document.querySelector('.input>input');
+        let main1=document.querySelector('.zheng');
+        let main2=document.querySelector('.yi');
+        let zhshu=document.querySelector('.zhshu');
+        let yishu=document.querySelector('.yishu');
+        let todo=new ToDos(shuru,main1,main2,zhshu,yishu);
+        todo.play();
+
+
+//
+////        删除
+//        let aa=document.querySelector('.a');
+//        console.log(aa);
+//        aa.onclick=function(e){
+//            let aa= e.target;
+//            let par=aa.parentNode;
+//            console.log(par);
+//        }
+//        aa();
+    }
+</script>

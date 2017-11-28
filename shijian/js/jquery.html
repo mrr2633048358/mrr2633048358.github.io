@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>jquery</title>
+</head>
+<body>
+<div>01</div>
+<div>02</div>
+<div>03</div>
+<div>04</div>
+</body>
+</html>
+<script>
+    window.onload=function(){
+        function JQ(){
+            let divs=document.querySelectorAll('div');
+            for(var i=0;i<divs.length;i++){
+                this[i]=divs[i];
+            }
+        }
+        JQ.prototype={
+            html(val){
+
+            },
+            check(val,index){
+//                console.log(this.length);
+                for(var i=0;i<this[i].length;i++){
+                    val.call(this[i],this[i],i);
+                }
+            }
+        }
+        let div=new JQ();
+        console.log(this.lnegth);
+//        div.html({'width':'200px','height':'200px','background':'red','marginTop':'30px'});
+//        div.check((val,index)=>{
+//            console.log(this);
+//            this[i].innerText='csdhchjhsbdjs';
+//        })
+    }
+</script>

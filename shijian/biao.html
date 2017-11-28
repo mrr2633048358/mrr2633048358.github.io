@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="js/animate.js"></script>
+    <style>
+        /**{
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            box-sizing: border-box;
+        }
+        main{
+            width: 1200px;
+            height: 40px;
+            margin: 0 auto;
+        }
+        ul.ul{
+            width: 100%;
+            height: 100%;
+            display: flex;
+            border: 1px solid #777;
+        }
+        ul.ul > li{
+            width: 20%;
+            height: 100%;
+            font-size: 20px;
+            text-align: center;
+            line-height: 40px;
+            color: #000;
+            position: relative;
+        }
+        ul.ul > li:hover{
+            background: red;
+            color: #fff;
+        }
+        ul.hiddon{
+            width: 100%;
+            height: 0;
+            overflow: hidden;
+            position: absolute;
+            left: 0;
+            top: 100%;
+        }
+        ul.hiddon > li{
+            width: 100%;
+            height: 40px;
+            color: #000;
+            border: 1px solid #777;
+        }
+        ul.hiddon > li:hover{
+            background: red;
+            color: #fff;
+        }*/
+        .time,.time2{
+            width: 400px;
+            overflow: hidden;
+            height: 40px;
+            border: 1px solid #333;
+            margin: 0 auto;
+            font-size: 16px;
+            line-height: 40px;
+            text-align: center;
+            color: #000;
+            font-weight: 600;
+        }
+        p{
+            font-size: 16px;
+            line-height: 40px;
+            text-align: center;
+            color: #000;
+            font-weight: 600;
+        }
+        span{
+            color: red;
+        }
+    </style>
+</head>
+<body><!--
+<main>
+    <ul class="ul">
+        <li>首页</li>
+        <li>企业新闻
+            <ul class="hiddon">
+                <li>企业新闻</li>
+            </ul>
+        </li>
+        <li>企业文化
+            <ul class="hiddon">
+                <li>企业文化</li>
+                <li>企业文化</li>
+            </ul>
+        </li>
+        <li>企业历史
+            <ul class="hiddon">
+                <li>企业历史</li>
+                <li>企业历史</li>
+                <li>企业历史</li>
+            </ul>
+        </li>
+        <li>关于我们
+            <ul class="hiddon">
+                <li>关于我们</li>
+                <li>关于我们</li>
+                <li>关于我们</li>
+                <li>关于我们</li>
+            </ul>
+        </li>
+    </ul>
+</main>-->
+<div class="time">
+    距离结业还有
+    <span></span>天
+    <span></span>小时
+    <span></span>分钟
+    <span></span>秒
+    <span></span>毫秒
+</div>
+<p>生命倒计时：</p>
+<div class="time2"></div>
+</body>
+</html>
+<script>
+window.onload=function(){
+    let box=document.querySelector('.box');
+//    构建场景
+    let str='';
+    for(let i=0;i<20;i++){
+        for(let j=0;j<20;j++){
+            str+=`<div id="c${i}-${j}"></div>`;
+        }
+    }
+    box.innerHTML=str;
+
+//    构建元素
+    let she=[
+        {x:0,y:0},
+        {x:0,y:1},
+        {x:0,y:2},
+    ];
+//   化蛇
+    she.forEach(val=>{
+        var dom=document.querySelector(`#c${val.x}-${val.y}`);
+    dom.classList.add('she');
+})
+
+//    食物
+let food=getFood();
+function getFood() {
+    do{
+        var x=Math.floor(Math.random()*20);
+        var y=Math.floor(Math.random()*20);
+    }while(check(x,y));
+
+    let fooddom=document.querySelector(`#c${x}-${y}`);
+    fooddom.classList.add('food');
+    return{x,y}
+}
+//检查       新坐标a，b
+function check(a,b) {
+    return she.some(val=>val.x==a&&val.y==b);
+
+}
+
+//    运动
+let way='right';
+function move() {
+//       蛇头坐标
+    let headCoords=she[she.length-1];
+    let newHead;
+//       判断方向
+    switch(way){
+        case 'right':
+            newHead={x:headCoords.x,y:headCoords.y+1};
+            break;
+        case 'left':
+            newHead={x:headCoords.x,y:headCoords.y-1};
+            break;
+        case 'top':
+            newHead={x:headCoords.x-1,y:headCoords.y};
+            break;
+        case 'bottom':
+            newHead={x:headCoords.x+1,y:headCoords.y};
+            break;
+    }
+
+//       蛇移动显示坐标
+    let newHeaddom=document.querySelector(`#c${newHead.x}-${newHead.y}`);
+
+//      判断游戏结束
+    if(!newHeaddom||check(newHead.x,newHead.y)){
+        clearInterval(t);
+        alert('game over');
+        return;
+    }
+
+//       移动变色
+    newHeaddom.className='she';
+//       放入蛇身
+    she.push(newHead);
+
+
+//       吃食物     相等获取下一个食物，不去蛇尾，自动+1； 不等于去掉蛇尾；
+    if(newHead.x==food.x&&newHead.y==food.y){
+//           获取食物
+        food=getFood();
+    }
+    else {
+        //       去蛇尾
+        let end=she.shift();
+        let enddom=document.querySelector(`#c${end.x}-${end.y}`);
+        enddom.classList.remove('she');
+
+    }
+
+}
+let t=setInterval(move,200);
+
+//   键盘事件
+document.onkeydown=function (e) {
+    let code=e.which;
+    switch (code){
+        case 37:
+            if(way=='right'){
+                return;
+            }
+            way='left';
+            break;
+        case 38:
+            if(way=='bottom'){
+                return;
+            }
+            way='top';
+            break;
+        case 39:
+            if(way=='left'){
+                return;
+            }
+            way='right';
+            break;
+        case 40:
+            if(way=='top'){
+                return;
+            }
+            way='bottom';
+            break;
+
+    }
+
+}
+
+
+
+    let time2=new Date(2018,0,1,6,0,0);
+    function arr(){
+        let time1=new Date();
+        let times=time2.getTime()-time1.getTime();
+        let d=Math.floor(times/(1000*60*60*24));
+        times%=1000*60*60*24;
+        let h=Math.floor(times/(1000*60*60));
+        times%=1000*60*60;
+        h=h<10?'0'+h:h;
+        let m=Math.floor(times/(1000*60));
+        times%=1000*60;
+        m=m<10?'0'+m:m;
+        let s=Math.floor(times/1000);
+        s=s<10?'0'+s:s;
+        let hs=times%1000;
+        if(hs<10){
+            hs='00'+hs;
+        }else if(hs>9&&hs<100){
+            hs='0'+hs;
+        }
+        return [d,h,m,s,hs];
+    }
+    let span=document.querySelectorAll('span');
+    console.log(span.length);
+    let t;/*
+    t=setInterval(()=>{
+        let brr=arr();
+        span.forEach(function(val,index){
+            val.innerText=brr[index];
+        });
+    },1);*/
+
+let time3=new Date(2070,1,1,0,0,0);
+let t2;/*
+let tm2=document.querySelector('.time2');
+//    tm.innerText=parseInt(time2.getTime()/1000/60/60-time1.getTime()/1000/60/60);
+    t2=setInterval(()=>{
+    let time1=new Date();
+    tm2.innerText=time3.getTime()-time1.getTime();
+    console.log('1');
+},1);*/
+
+
+
+    /*let li=document.querySelectorAll('.ul>li');
+    let lison=document.querySelectorAll('.hiddon>li');
+    let height=lison[0].offsetHeight;
+    let t;
+    console.log(height);
+    li.forEach(function(val){
+        val.onmouseenter=function(){
+            clearInterval(t);
+            t=setTimeout(()=>{
+                let ul=this.firstElementChild;
+                if(ul==null){
+                    return;
+                }else{
+                    let child=ul.children.length;
+                    console.log(child);
+                    animate(ul,{height:child*height},200);
+                }
+            },200);
+        }
+        val.onmouseleave=function(){
+            clearInterval(t);
+            let ul=val.firstElementChild;
+            if(ul==null){
+                return;
+            }else{
+                let child=ul.children.length;
+                console.log(child);
+                animate(ul,{height:0},200);
+            }
+        }
+    })*/
+}
+</script>
